@@ -3,47 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flores Amarillas con Pétalos</title>
+    <title>Girasoles Bonitos</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #FFF8E1;
-        }
-
-        canvas {
-            display: block;
-        }
-
+        body { margin: 0; overflow: hidden; background: #FFF8E1; }
+        canvas { display: block; }
         #btnMasFlores {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
+            position: fixed; bottom: 20px; left: 50%;
             transform: translateX(-50%);
             padding: 15px 30px;
-            background-color: #C62828;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 18px;
+            background: #8D6E63;
+            color: white; border: none;
+            border-radius: 30px; font-size: 18px;
             cursor: pointer;
         }
-
-        #textoPrincipal {
-            position: fixed;
-            top: 30%;
-            left: 50%;
+        h1 {
+            position: fixed; top: 10%; left: 50%;
             transform: translateX(-50%);
-            color: #B71C1C;
-            font-size: 40px;
-            text-align: center;
+            color: #5D4037;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
+    <h1>¡Girasoles Hermosos! 🌻</h1>
     <canvas id="flowerCanvas"></canvas>
-    <h1 id="textoPrincipal">¡Te amo mucho! 💗</h1>
-    <button id="btnMasFlores">Más Flores</button>
+    <button id="btnMasFlores">Más Girasoles</button>
 
     <script src="script.js"></script>
 </body>
