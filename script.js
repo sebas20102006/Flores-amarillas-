@@ -1,55 +1,88 @@
-// Selecciona elementos del DOM
-const flowerContainer = document.getElementById('flower-container');
-const generateBtn = document.getElementById('generate-btn');
-const mainText = document.getElementById('main-text');
-const subText = document.getElementById('sub-text');
+// PROYECTO FLORES AMARILLAS CON PÉTALOS
+// Repositorio: Flores-amarillas-
 
-// Función para crear una flor en posición aleatoria
-function createFlower() {
-    const flower = document.createElement('div');
-    flower.classList.add('flower');
+// Configuración del lienzo
+const canvas = document.getElementById('flowerCanvas');
+const ctx = canvas.getContext('2d');
 
-    // Posición horizontal aleatoria
-    const posX = Math.random() * 100;
-    flower.style.left = `${posX}%`;
-
-    // Duración de animación aleatoria
-    const animationDuration = 4 + Math.random() * 6;
-    flower.style.animationDuration = `${animationDuration}s`;
-
-    // Añade la flor al contenedor
-    flowerContainer.appendChild(flower);
-
-    // Elimina la flor después de la animación
-    setTimeout(() => {
-        flower.remove();
-    }, animationDuration * 1000);
+// Ajustar tamaño del lienzo a la pantalla
+function ajustarCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
+ajustarCanvas();
+window.addEventListener('resize', ajustarCanvas);
 
-// Genera flores automáticamente cada 500ms
-setInterval(createFlower, 500);
-
-// Genera más flores al hacer clic en el botón
-generateBtn.addEventListener('click', () => {
-    for (let i = 0; i < 10; i++) {
-        setTimeout(() => createFlower(), i * 100);
+// Clase para crear flores con pétalos
+class Flor {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.tamano = Math.random() * 40 + 20; // Tamaño entre 20 y 60
+        this.velocidadX = (Math.random() - 0.5) * 2;
+        this.velocidadY = (Math.random() - 0.5) * 2;
+        this.numPetalos = Math.floor(Math.random() * 4) + 5; // 5 a 8 pétalos
     }
 
-    // Cambia el texto temporalmente
-    const originalMain = mainText.textContent;
-    const originalSub = subText.textContent;
-    mainText.textContent = '¡Te Quiero Mucho!';
-    subText.textContent = '❤️ Flores con Amor ❤️';
+    dibujar() {
+        // Centro de la flor
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.tamano * 0.2, 0, Math.PI * 2);
+        ctx.fillStyle = '#FFD700';
+        ctx.fill();
 
-    setTimeout(() => {
-        mainText.textContent = originalMain;
-        subText.textContent = originalSub;
-    }, 2000);
-});
+        // Pétalos alrededor
+        for (let i = 0; i < this.numPetalos; i++) {
+            const angulo = (i * Math.PI * 2) / this.numPetalos;
+            const xPetalo = this.x + Math.cos(angulo) * this.tamano * 0.7;
+            const yPetalo = this.y + Math.sin(angulo) * this.tamano * 0.7;
 
-// Opcional: Permite personalizar el texto desde la consola o añadir un formulario
-function customizeMessage(main, sub) {
-    mainText.textContent = main;
-    subText.textContent = sub;
+            ctx.beginPath();
+            ctx.ellipse(
+                xPetalo, yPetalo, 
+                this.tamano * 0.4, this.tamano * 0.2, 
+                angulo, 0, Math.PI * 2
+            );
+            ctx.fillStyle = '#FFC107';
+            ctx.fill();
+            ctx.strokeStyle = '#FFFACD';
+            ctx.stroke();
+        }
+    }
+
+    actualizar() {
+        this.x += this.velocidadX;
+        this.y += this.velocidadY;
+
+        // Rebotar en los bordes
+        if (this.x < 0 || this.x > canvas.width) this.velocidadX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.velocidadY *= -1;
+    }
 }
-// Ejemplo: customizeMessage('Feliz Día', 'Para mi Amor');
+
+// Crear flores iniciales
+let flores = [];
+function crearFloresIniciales() {
+    for (let i = 0; i < 15; i++) {
+        flores.push(new Flor());
+    }
+}
+crearFloresIniciales();
+
+// Animación principal
+function animar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    flores.forEach(flor => {
+        flor.actualizar();
+        flor.dibujar();
+    });
+    requestAnimationFrame(animar);
+}
+animar();
+
+// Botón para agregar más flores
+document.getElementById('btnMasFlores').addEventListener('click', () => {
+    for (let i = 0; i < 10; i++) {
+        flores.push(new Flor());
+    }
+});
